@@ -37,6 +37,7 @@ from .. import losses
 from .. import models
 from ..callbacks import RedirectModel
 from ..callbacks.eval import Evaluate
+from ..callbacks.kafka_logger import Kafka_Logger
 from ..models.retinanet import retinanet_bbox
 from ..preprocessing.csv_generator import CSVGenerator
 from ..preprocessing.kitti import KittiGenerator
@@ -201,6 +202,10 @@ def create_callbacks(model, training_model, prediction_model, validation_generat
 
     if args.tensorboard_dir:
         callbacks.append(tensorboard_callback)
+
+    # log using kafka logger
+    if args.kafka_bootstrap_servers:
+        callbacks.append(Kafka_Logger(args.kafka_bootstrap_servers))
 
     return callbacks
 
@@ -437,12 +442,9 @@ def parse_args(args):
     return check_args(parser.parse_args(args))
 
 
-def main(args=None):
+def main_(args):
     # parse arguments
-    if args is None:
-        args = sys.argv[1:]
-    args = parse_args(args)
-
+    check_args(args)
     # create object that stores backbone information
     backbone = models.backbone(args.backbone)
 
@@ -522,6 +524,3 @@ def main(args=None):
         initial_epoch=args.initial_epoch
     )
 
-
-if __name__ == '__main__':
-    main()

@@ -21,6 +21,8 @@ import warnings
 
 import pytest
 
+from attrdict import AttrMap
+
 
 @pytest.fixture(autouse=True)
 def clear_session():
@@ -34,60 +36,69 @@ def test_coco():
     # ignore warnings in this test
     warnings.simplefilter('ignore')
 
+    # args 
+    args = AttrMap({
+        'epochs' : 1,
+        'steps' : 1,
+        'imagenet_weights': False,
+        'snapshots' : False,
+        'dataset_type' : 'coco',
+        'coco_path': 'tests/test-data/coco',
+    })
     # run training / evaluation
-    keras_retinanet.bin.train.main([
-        '--epochs=1',
-        '--steps=1',
-        '--no-weights',
-        '--no-snapshots',
-        'coco',
-        'tests/test-data/coco',
-    ])
+    keras_retinanet.bin.train.main_(args)
 
 
 def test_pascal():
     # ignore warnings in this test
     warnings.simplefilter('ignore')
 
+    # args 
+    args = AttrMap({
+        'epochs' : 1,
+        'steps' : 1,
+        'imagenet_weights': False,
+        'snapshots' : False,
+        'dataset_type' : 'pascal',
+        'pascal_path': 'tests/test-data/pascal'
+    })
+
     # run training / evaluation
-    keras_retinanet.bin.train.main([
-        '--epochs=1',
-        '--steps=1',
-        '--no-weights',
-        '--no-snapshots',
-        'pascal',
-        'tests/test-data/pascal',
-    ])
+    keras_retinanet.bin.train.main_(args)
 
 
 def test_csv():
     # ignore warnings in this test
     warnings.simplefilter('ignore')
 
+    args = AttrMap({
+        'epochs' : 1,
+        'steps' : 1,
+        'imagenet_weights': False,
+        'snapshots' : False,
+        'dataset_type' : 'csv',
+        'annotations' : 'tests/test-data/csv/annotations.csv',
+        'classes': 'tests/test-data/csv/classes.csv'
+    })
+
     # run training / evaluation
-    keras_retinanet.bin.train.main([
-        '--epochs=1',
-        '--steps=1',
-        '--no-weights',
-        '--no-snapshots',
-        'csv',
-        'tests/test-data/csv/annotations.csv',
-        'tests/test-data/csv/classes.csv',
-    ])
+    keras_retinanet.bin.train.main_(args)
 
 
 def test_vgg():
     # ignore warnings in this test
     warnings.simplefilter('ignore')
 
+    args = AttrMap({
+        'backbone' : 'vgg16',
+        'epochs' : 1,
+        'steps' : 1,
+        'imagenet_weights': False,
+        'snapshots' : False,
+        'freeze_backbone': True,
+        'dataset_type' : 'coco',
+        'coco_path': 'tests/test-data/coco'
+    })
+
     # run training / evaluation
-    keras_retinanet.bin.train.main([
-        '--backbone=vgg16',
-        '--epochs=1',
-        '--steps=1',
-        '--no-weights',
-        '--no-snapshots',
-        '--freeze-backbone',
-        'coco',
-        'tests/test-data/coco',
-    ])
+    keras_retinanet.bin.train.main_(args)
