@@ -207,7 +207,13 @@ def create_callbacks(model, training_model, prediction_model, validation_generat
     if args.kafka_bootstrap_servers:
         callbacks.append(Kafka_Logger(args.kafka_bootstrap_servers))
 
+    # add additional callbacks
+    if args.additional_callbacks:
+        callbacks = callbacks + args.additional_callbacks
+
     return callbacks
+
+    
 
 
 def create_generators(args, preprocess_image):
