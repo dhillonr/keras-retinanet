@@ -209,7 +209,8 @@ def create_callbacks(model, training_model, prediction_model, validation_generat
 
     # add additional callbacks
     if args.additional_callbacks:
-        callbacks = callbacks + args.additional_callbacks
+        for i in args.additional_callbacks:
+            callbacks.append(i)
 
     return callbacks
 
